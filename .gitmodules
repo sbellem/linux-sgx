@@ -3,8 +3,8 @@
 	url = https://github.com/intel/SGXDataCenterAttestationPrimitives.git
 [submodule "openmp"]
 	path = external/openmp/openmp_code
-	url = https://github.com/llvm-mirror/openmp.git
-	branch = svn-tags/RELEASE_801
+	url = https://github.com/sbellem/openmp.git
+	branch = RELEASE_801-SGX_PATCH
 [submodule "dnnl"]
 	path = external/dnnl/dnnl
 	url = https://github.com/intel/mkl-dnn.git
