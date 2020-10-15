@@ -1,0 +1,9 @@
+version: '3.7'
+
+services:
+  sgx-nix-dev:
+    image: sgx.build.nix
+    build:
+      context: .
+    volumes:
+      - ./sgx.nix:/home/user/sgx.nix

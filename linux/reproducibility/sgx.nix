@@ -25,6 +25,7 @@ stdenvNoCC.mkDerivation {
     sha256 = "009hlkgnn3wvbsnawpfcwdxyncax9mb260vmh9anb91lmqbj74rp";
     fetchSubmodules = true;
   };
+  #preBuild = ''
   postUnpack = ''
     tar -C $sourceRoot -xvf $ipp_crypto
     tar -C $sourceRoot -xvf $asldobjdump
@@ -40,27 +41,28 @@ stdenvNoCC.mkDerivation {
     gnum4
     openssl
     gnumake
-
     #glibc
-    #binutils-unwrapped
-    #gcc8
     /nix/store/681354n3k44r8z90m35hm8945vsp95h1-glibc-2.27
+    #binutils-unwrapped
     /nix/store/1kl6ms8x56iyhylb2r83lq7j3jbnix7w-binutils-2.31.1
+    #gcc8
     /nix/store/lvwq3g3093injr86lm0kp0f61k5cbpay-gcc-wrapper-8.3.0
-
     texinfo
     bison
     flex
   ];
   dontConfigure = true;
-  #buildPhase = ''
-  #  export BINUTILS_DIR=${xbinutils}/bin
-  #  echo $BINUTILS_DIR
-  #  '';
-  buildFlags = ["sdk"];
+  buildPhase = ''
+    export BINUTILS_DIR=$src/$sourceRoot/external/toolset/nix
+    echo lalala $BINUTILS_DIR
+    '';
+  buildFlags = ["sdk_install_pkg"];
   dontInstall = true;
+  postBuild = ''
+    echo -e 'no\n'$out | ./linux/installer/bin/sgx_linux_x64_sdk_2.11.100.2.bin
+    '';
+
   dontFixup = true;
-  
   shellHook = ''
   echo "SGX build enviroment"
   '';
