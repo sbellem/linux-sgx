@@ -278,16 +278,16 @@ generate_cmd_script
 ######################################################
 # Check if the image already exists. If not, build the docker image
 set +e && docker image inspect sgx.build.env:latest > /dev/null 2>&1 && set -e
-if [ $? != 0 ]; then
-    docker build -t sgx.build.env --build-arg https_proxy=$https_proxy \
-              --build-arg http_proxy=$http_proxy -f $script_dir/Dockerfile .
-fi
-
-if [ $type_flag = 0 ]; then
-    docker run -v $code_dir:$mount_dir -it --network none --rm sgx.build.env
-else
-    docker run -v $code_dir:$mount_dir -it --network none --rm sgx.build.env /bin/bash -c $mount_dir/cmd.sh
-fi
+#if [ $? != 0 ]; then
+#    docker build -t sgx.build.env --build-arg https_proxy=$https_proxy \
+#              --build-arg http_proxy=$http_proxy -f $script_dir/Dockerfile .
+#fi
+#
+#if [ $type_flag = 0 ]; then
+#    docker run -v $code_dir:$mount_dir -it --network none --rm sgx.build.env
+#else
+#    docker run -v $code_dir:$mount_dir -it --network none --rm sgx.build.env /bin/bash -c $mount_dir/cmd.sh
+#fi
 
 
 
