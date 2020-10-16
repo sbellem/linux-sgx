@@ -66,9 +66,10 @@ omp_code:
 
 
 $(LIBOMP): $(CHECK_SOURCE)
-ifeq ("$(wildcard $(OMP_DIR)/final/runtime/src/sgx_stub.h)", "")
-	cd openmp_code && git apply ../0001-Enable-OpenMP-in-SGX.patch && cd ..
-endif
+# FIXME troubleshooting -- disable check & git apply patch for nix derivation development
+#ifeq ("$(wildcard $(OMP_DIR)/final/runtime/src/sgx_stub.h)", "")
+#	cd openmp_code && git apply ../0001-Enable-OpenMP-in-SGX.patch && cd ..
+#endif
 	$(MKDIR) openmp_code/final/build && cd openmp_code/final/build && cmake $(OMP_CONFIG) .. && make 
 
 
