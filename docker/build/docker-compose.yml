@@ -35,11 +35,18 @@ version: '3'
 services:
   aesm:
     image: sgx_aesm
+    build:
+      context: ../..
+      args:
+        http_proxy: $http_proxy
+        https_proxy: $https_proxy
+      target: aesm
     devices:
-      - /dev/sgx/enclave
-      - /dev/sgx/provision
+      - /dev/isgx
+        #- /dev/sgx/enclave
+        #- /dev/sgx/provision
     volumes:
-      - aesmd-socket:/var/run/aesmd
+      - aesmd:/var/run/aesmd
     stdin_open: true
     tty: true
     environment:
@@ -48,12 +55,19 @@ services:
 
   sample:
     image: sgx_sample
+    build:
+      context: ../..
+      args:
+        http_proxy: $http_proxy
+        https_proxy: $https_proxy
+      target: sample
     depends_on:
       - aesm
     devices:
-      - /dev/sgx/enclave
+      - /dev/isgx
+        #- /dev/sgx/enclave
     volumes:
-      - aesmd-socket:/var/run/aesmd
+      - aesmd:/var/run/aesmd
     stdin_open: true
     tty: true
     environment:
@@ -61,5 +75,9 @@ services:
       - https_proxy
 
 volumes:
-  aesmd-socket:
-    external: true
+  aesmd:
+    driver: local
+    driver_opts:
+      type: "tmpfs"
+      device: "tmpfs"
+      o: "rw"

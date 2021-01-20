@@ -79,7 +79,7 @@ ENV LD_LIBRARY_PATH=.
 CMD ./aesm_service --no-daemon
 
 
-FROM ubuntu:18.04 as sample
+FROM ubuntu:18.04 as app-builder
 RUN apt-get update && apt-get install -y \
     g++ \
     libcurl4-openssl-dev \
@@ -89,15 +89,32 @@ RUN apt-get update && apt-get install -y \
     module-init-tools
 
 WORKDIR /opt/intel
-COPY --from=builder /linux-sgx/linux/installer/bin/*.bin ./
-RUN ./sgx_linux_x64_psw*.bin --no-start-aesm
+COPY --from=builder /linux-sgx/linux/installer/bin/sgx_linux_x64_sdk_*.bin ./
+#RUN ./sgx_linux_x64_psw*.bin --no-start-aesm
 RUN sh -c 'echo yes | ./sgx_linux_x64_sdk_*.bin'
 
 #WORKDIR /opt/intel/sgxsdk/SampleCode/SampleEnclave
 WORKDIR /opt/intel/sgxsdk/SampleCode/RemoteAttestation
 RUN SGX_DEBUG=0 SGX_MODE=HW SGX_PRERELEASE=1 make
 
+
+FROM ubuntu:18.04 as run-app
+RUN apt-get update && apt-get install -y \
+    g++ \
+    libcurl4-openssl-dev \
+    libprotobuf-dev \
+    libssl-dev \
+    make \
+    module-init-tools
+
+WORKDIR /opt/intel
+COPY --from=builder /linux-sgx/linux/installer/bin/sgx_linux_x64_psw*.bin ./
+RUN ./sgx_linux_x64_psw*.bin --no-start-aesm
+
+COPY --from=app-builder /opt/intel/sgxsdk/SampleCode/RemoteAttestation/app /opt/intel/app
+COPY --from=app-builder /opt/intel/sgxsdk/SampleCode/RemoteAttestation/sample_libcrypto /opt/intel/sample_libcrypto
 RUN adduser -q --disabled-password --gecos "" --no-create-home sgxuser
 USER sgxuser
 
+WORKDIR /opt/intel
 CMD LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/sample_libcrypto ./app
