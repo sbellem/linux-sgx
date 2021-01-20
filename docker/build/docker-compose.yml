@@ -43,9 +43,8 @@ services:
         https_proxy: $https_proxy
       target: aesm
     devices:
-      - /dev/isgx
-        #- /dev/sgx/enclave
-        #- /dev/sgx/provision
+      - /dev/sgx/enclave
+      - /dev/sgx/provision
     volumes:
       - aesmd-socket:/var/run/aesmd
     stdin_open: true
@@ -66,8 +65,7 @@ services:
     depends_on:
       - aesm
     devices:
-      - /dev/isgx
-        #- /dev/sgx/enclave
+      - /dev/sgx/enclave
     volumes:
       - aesmd-socket:/var/run/aesmd
     stdin_open: true
