@@ -15,7 +15,13 @@ $ make preparation
 ### Run with Docker Compose
 This will start AESM and an SGX sample on one terminal using docker-compose.
 ```
-$ ./build_compose_run.sh
+$ docker-compose up
+```
+
+If you need to re-build the image before running the containers:
+
+```
+$ docker-compose up --build
 ```
 
 ### Run with Docker directly
@@ -24,11 +30,11 @@ Alternatively, you can run AESM and SGX sample containers in two separate termin
 
 In one terminal,
 ```
-$ ./build_and_run_aesm_docker.sh
+$ docker-compose up aesm
 ```
 In another terminal,
 ```
-$ ./build_and_run_sample_docker.sh
+$ docker-compose up sample
 ```
 
 ## Dockerfile
@@ -38,9 +44,10 @@ The Dockerfile specifies 3 image build targets:
 2. aesm: Takes the PSW installer from builder to install and run the AESM daemon.
 3. sample: Installs the SDK installer from builder, then builds and runs the SampleEnclave app
 
-- [build_and_run_aesm_docker.sh](./build_and_run_aesm_docker.sh): Shows how to build and run the AESM image in Docker. This will start the AESM service listening to a named socket, located in /var/run/aesmd in the container and mounted in Docker volume aesmd-socket.
-
-- [build_and_run_sample_docker.sh](./build_and_run_sample_docker.sh): Shows how to build and run the SampleEnclave app inside a Docker container with a locally built SGX sample image.
+The Docker Compose file specifies 2 services and one volume:
+- `aesm`: Builds and runs the AESM image. Running this service starts the AESM service listening to a named socket, located in `/var/run/aesmd` in the container and mounted in Docker volume `aesmd-socket`.
+- `sample`: Builds and runs the `SampleEnclave` app.
+- `aesmd-socket`: Defines the volume used for the AESM socket.
 
 ## Legacy Launch Control driver and kernel for SGX
 
@@ -50,9 +57,12 @@ All SGX applications need access to the SGX device nodes exposed by the kernel s
 [SGX kernel patches](https://github.com/jsakkine-intel/linux-sgx/commits/master) are still in process of upstreaming.
 The [Flexible Launch Control driver](https://github.com/intel/SGXDataCenterAttestationPrimitives/tree/master/driver) is developed to imitate the kernel patches as closely as possible.
 
-The sample scripts and Compose files are compatible with the Flexible Launch Control driver or a custom built kernel with SGX support. If you need to use the Legacy Launch Control driver then you need to make following modifications:
-1. Replace "/dev/sgx/enclave" device with "/dev/isgx" and **remove** "/dev/sgx/provision" device for AESM in docker-compose.yml and build_and_run_aesm_docker.sh
-2. Replace "/dev/sgx/enclave" with "/dev/isgx" for the sample container in docker-compose.yml and build_and_run_sample_docker.sh
+The Docker Compose file is compatible with the Flexible Launch Control driver or a
+custom built kernel with SGX support. If you need to use the Legacy Launch Control
+driver then you need to make following modifications:
+
+1. Replace "/dev/sgx/enclave" device with "/dev/isgx" and **remove** "/dev/sgx/provision" device for AESM in docker-compose.yml.
+2. Replace "/dev/sgx/enclave" with "/dev/isgx" for the sample container in docker-compose.yml.
 
 **Note**: When you switch between drivers, make sure you uninstall the previous driver and reboot the system before installing the other one.
 
