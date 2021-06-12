@@ -70,9 +70,9 @@ OUT_DIR = lib/linux/$(ARCH)/$(SUB_DIR)/
 # Why can't IPP simply be a dependency like any other dependency?
 # IPP library is a git submodule which must be init
 CHECK_SOURCE :=
-ifeq ("$(wildcard $(LINUX_EXTERNAL_DIR)/ippcp_internal/ipp_crypto)", "")
-CHECK_SOURCE := ipp_source
-endif
+#ifeq ("$(wildcard $(LINUX_EXTERNAL_DIR)/ippcp_internal/ipp_crypto)", "")
+#CHECK_SOURCE := ipp_source
+#endif
 
 
 .PHONY: all build_ipp
