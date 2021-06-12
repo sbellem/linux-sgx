@@ -25,7 +25,10 @@ Master_EULA_for_Intel_Sw_Development_Products.pdf
 external/ippcp_internal/inc/ippcp.h
 external/ippcp_internal/inc/ippcpdefs.h
 external/ippcp_internal/inc/ippversion.h
-external/ippcp_internal/inc/sgx_ippcp.h
+
+# see https://github.com/intel/linux-sgx/issues/719
+# external/ippcp_internal/inc/sgx_ippcp.h
+
 external/ippcp_internal/license/
 external/toolset/
 redist.txt
