@@ -82,13 +82,33 @@ stdenvNoCC.mkDerivation {
     echo -e 'no\n'$out | ./linux/installer/bin/sgx_linux_x64_sdk_*.bin
 
     source $out/sgxsdk/environment
+
     export MITIGATION_CFLAGS+=-B$BINUTILS_DIR
+
+    echo "Building le.so"
     cd ./psw/ae/le && make && cd ../../..
+    echo "DONE building le.so"
+
+    echo "Building pce.so"
     cd ./psw/ae/pce && make && cd ../../..
+    echo "DONE building pce.so"
+
+    echo "Building pve.so"
     cd ./psw/ae/pve && make && cd ../../..
+    echo "DONE building pve.so"
+
+    echo "Building qe.so"
     cd ./psw/ae/qe && make && cd ../../..
+    echo "DONE building qe.so"
+
+    echo "Building qe3.so"
     cd ./external/dcap_source/QuoteGeneration/quote_wrapper/quote/enclave/linux && make && cd ../../../../../../..
+    echo "DONE building qe3.so"
+
+    patchShebangs ./external/dcap_source/QuoteVerification/prepare_sgxssl.sh
+    echo "Building qve.so"
     cd ./external/dcap_source/QuoteVerification/QvE && make && cd ../../../..
+    echo "DONE building qve.so"
 
     runHook postBuild
     '';
