@@ -83,12 +83,12 @@ stdenvNoCC.mkDerivation {
 
     source $out/sgxsdk/environment
     export MITIGATION_CFLAGS+=-B$BINUTILS_DIR
-    cd ./psw/ae/le && make
-    cd ./psw/ae/pce && make
-    cd ./psw/ae/pve && make
-    cd ./psw/ae/qe && make
-    cd ./external/dcap_source/QuoteGeneration/quote_wrapper/quote/enclave/linux && make
-    cd ./external/dcap_source/QuoteVerification/QvE && make
+    cd ./psw/ae/le && make && cd ../../..
+    cd ./psw/ae/pce && make && cd ../../..
+    cd ./psw/ae/pve && make && cd ../../..
+    cd ./psw/ae/qe && make && cd ../../..
+    cd ./external/dcap_source/QuoteGeneration/quote_wrapper/quote/enclave/linux && make && cd ../../../../../../..
+    cd ./external/dcap_source/QuoteVerification/QvE && make && cd ../../../..
 
     runHook postBuild
     '';
