@@ -21,6 +21,7 @@
   perl,
   python3,
   texinfo,
+  which
 }:
 
 stdenvNoCC.mkDerivation {
@@ -60,6 +61,7 @@ stdenvNoCC.mkDerivation {
     python3
     texinfo
     nasm
+    which
   ];
   preBuild = ''
     export BINUTILS_DIR=$binutils/bin
