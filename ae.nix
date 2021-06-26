@@ -107,10 +107,10 @@ stdenvNoCC.mkDerivation {
     cd ./external/dcap_source/QuoteGeneration/quote_wrapper/quote/enclave/linux && make && cd ../../../../../../..
     echo "DONE building qe3.so"
 
-    patchShebangs ./external/dcap_source/QuoteVerification/prepare_sgxssl.sh
-    echo "Building qve.so"
-    cd ./external/dcap_source/QuoteVerification/QvE && make && cd ../../../..
-    echo "DONE building qve.so"
+    #patchShebangs ./external/dcap_source/QuoteVerification/prepare_sgxssl.sh
+    #echo "Building qve.so"
+    #cd ./external/dcap_source/QuoteVerification/QvE && make && cd ../../../..
+    #echo "DONE building qve.so"
 
     runHook postBuild
     '';
@@ -121,7 +121,7 @@ stdenvNoCC.mkDerivation {
     cp ./psw/ae/pve/pve.so $out/ae/
     cp ./psw/ae/qe/qe.so $out/ae/
     cp ./external/dcap_source/QuoteGeneration/quote_wrapper/quote/enclave/linux/qe3.so $out/ae/
-    cp ./external/dcap_source/QuoteVerification/QvE/qve.so $out/ae/
+    #cp ./external/dcap_source/QuoteVerification/QvE/qve.so $out/ae/
     '';
   dontInstall = true;
   dontFixup = true;
