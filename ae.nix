@@ -21,6 +21,7 @@
   perl,
   python3,
   texinfo,
+  wget,
   which
 }:
 
@@ -61,6 +62,7 @@ stdenvNoCC.mkDerivation {
     python3
     texinfo
     nasm
+    wget
     which
   ];
   preBuild = ''
